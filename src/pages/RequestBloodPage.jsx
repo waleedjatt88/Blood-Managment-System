@@ -1,5 +1,7 @@
-// src/pages/RequestBloodPage.jsx
+import { useState } from 'react';
 import styled from 'styled-components';
+import { toast } from 'react-toastify';
+import { createRequest } from '../services/api';
 import Input from '../components/Input/Input';
 import Button from '../components/Button/Button';
 import Select from '../components/Select/Select';
@@ -56,6 +58,43 @@ const FullWidthFormGroup = styled(FormGroup)`
 `;
 
 const RequestBloodPage = () => {
+  const [formData, setFormData] = useState({
+    patientName: '',
+    contact: '',
+    city: '',
+    hospital: '',
+    bloodGroup: '',
+    quantity: ''
+  });
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [id]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.patientName || !formData.contact || !formData.city || !formData.hospital || !formData.bloodGroup || !formData.quantity) {
+      toast.error("Please fill all the required fields.");
+      return;
+    }
+
+    try {
+      const response = await createRequest(formData);
+      toast.success(response.data.message || "Request submitted successfully!");
+      setFormData({
+        patientName: '', contact: '', city: '', hospital: '', bloodGroup: '', quantity: ''
+      });
+
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to submit request.");
+    }
+  };
+
   return (
     <>
       <PageHeader>
@@ -66,30 +105,37 @@ const RequestBloodPage = () => {
       <PageContent>
         <FormContainer>
           <FormTitle>Blood Request Form</FormTitle>
-          <FormGrid>
-            <FormGroup>
-              <Label htmlFor="patient-name">Patient's Full Name</Label>
-              <Input type="text" id="patient-name" placeholder="Enter patient's name" />
+          <FormGrid onSubmit={handleSubmit}>
+              <FormGroup>
+              <Label htmlFor="patientName">Patient's Full Name</Label>
+              <Input type="text" id="patientName" placeholder="Enter patient's name" value={formData.patientName} onChange={handleChange} />
             </FormGroup>
 
             <FormGroup>
               <Label htmlFor="contact">Contact Number</Label>
-              <Input type="tel" id="contact" placeholder="0300-1234567" />
+              <Input type="tel" id="contact" placeholder="0300-1234567" value={formData.contact} onChange={handleChange} />
             </FormGroup>
 
             <FormGroup>
               <Label htmlFor="city">City</Label>
-              <Input type="text" id="city" placeholder="e.g., Karachi" />
+              <Input type="text" id="city" placeholder="e.g., Karachi" value={formData.city} onChange={handleChange} />
             </FormGroup>
-
             <FormGroup>
               <Label htmlFor="hospital">Hospital Name</Label>
-              <Input type="text" id="hospital" placeholder="Enter hospital name" />
+              <Select id="hospital" value={formData.hospital} onChange={handleChange}>
+                <option value="">Select Hospital</option>
+                <option value="Sheikh Zayed Hospital">Sheikh Zayed Hospital</option>
+                <option value="THQ Hospital, Khanpur">THQ Hospital, Khanpur</option>
+                <option value="DHQ Hospital, RYK">DHQ Hospital, RYK</option>
+                <option value="City Medical Center">City Medical Center</option>
+                <option value="Al-Khidmat Hospital">Al-Khidmat Hospital</option>
+                <option value="Khanpur General Hospital">Khanpur General Hospital</option>
+              </Select>
             </FormGroup>
 
             <FormGroup>
-              <Label htmlFor="blood-group">Required Blood Group</Label>
-              <Select id="blood-group">
+              <Label htmlFor="bloodGroup">Required Blood Group</Label>
+              <Select id="bloodGroup" value={formData.bloodGroup} onChange={handleChange}>
                 <option value="">Select Blood Group</option>
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
@@ -104,11 +150,11 @@ const RequestBloodPage = () => {
             
             <FormGroup>
               <Label htmlFor="quantity">Quantity (Units)</Label>
-              <Input type="number" id="quantity" placeholder="e.g., 2" />
+              <Input type="number" id="quantity" placeholder="e.g., 2" value={formData.quantity} onChange={handleChange}/>
             </FormGroup>
             
             <FullWidthFormGroup>
-              <Button style={{ marginTop: '20px', width: '100%', fontSize: '18px' }}>Submit Request</Button>
+              <Button type="submit" style={{ marginTop: '20px', width: '100%', fontSize: '18px' }}>Submit Request</Button>
             </FullWidthFormGroup>
           </FormGrid>
         </FormContainer>
