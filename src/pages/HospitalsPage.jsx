@@ -3,6 +3,13 @@ import Input from '../components/Input/Input';
 import Button from '../components/Button/Button';
 import Select from '../components/Select/Select';
 
+import sheikhZayedImg from '../assets/hospitals/sheikh-zayed.jpg';
+import RykhosptalImg from "../assets/hospitals/rykhospital.jpg";
+import millatSadiqabadImg from '../assets/hospitals/millathospital.jpg';
+import thqKhanpurImg from '../assets/hospitals/thq-khanpur.jpg';
+import hubspokemodelhospitalImg from '../assets/hospitals/hub&spoke hospital.jpg';
+import thqHospitalImg from '../assets/hospitals/thq hospital.jpg';
+
 const PageHeader = styled.div`
   background-color: #f0f0f0;
   padding: 40px 5%;
@@ -73,48 +80,50 @@ const HospitalInfo = styled.p`
 const hospitalsData = [
   { 
     id: 1, 
-    name: 'City General Hospital', 
-    city: 'Lahore', 
-    contact: '042-1234567',
-    imageUrl: 'https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=500&q=80' 
+    name: 'Sheikh Zayed Hospital', 
+    city: 'Rahim Yar Khan', 
+    contact: '068-9230111',
+    imageUrl: sheikhZayedImg
   },
   { 
     id: 2, 
-    name: 'Jinnah Hospital', 
-    city: 'Karachi', 
-    contact: '021-9876543',
-    imageUrl: 'https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?auto=compress&cs=tinysrgb&w=600'
+    name: 'RYK Hospital', 
+    city: 'Rahim Yar Khan', 
+    contact: '068-9239000',
+    imageUrl: RykhosptalImg
   },
+
   { 
     id: 3, 
-    name: 'Shifa International', 
-    city: 'Islamabad', 
-    contact: '051-1112223',
-    imageUrl: 'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=500&q=80'
+    name: 'Millat Hospital', 
+    city: 'Sadiqabad', 
+    contact: '068-5801234',
+    imageUrl: millatSadiqabadImg
   },
   { 
     id: 4, 
-    name: 'Services Hospital', 
-    city: 'Lahore', 
-    contact: '042-4445556',
-    imageUrl: 'https://images.pexels.com/photos/236380/pexels-photo-236380.jpeg?auto=compress&cs=tinysrgb&w=600'
+    name: 'THQ Hospital', 
+    city: 'Khanpur', 
+    contact: '068-5551234',
+    imageUrl: thqKhanpurImg
   },
+
   { 
     id: 5, 
-    name: 'Aga Khan University Hospital', 
-    city: 'Karachi', 
-    contact: '021-34930051',
-    imageUrl: 'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=500&q=80'
+    name: 'Hub & Spoke Model Hospital', 
+    city: 'Zahir Pir', 
+    contact: '0300-1122334',
+    imageUrl: hubspokemodelhospitalImg
   },
+  
   { 
     id: 6, 
-    name: 'PIMS Hospital', 
-    city: 'Islamabad', 
-    contact: '051-9261170',
-    imageUrl: 'https://images.unsplash.com/photo-1580281658223-9b93f18ae9ae?w=500&q=80'
+    name: 'THQ Hospital', 
+    city: 'Liaqatpur', 
+    contact: '0311-5566778',
+    imageUrl: thqHospitalImg
   },
 ];
-
 const HospitalsPage = () => {
   return (
     <>
@@ -128,9 +137,14 @@ const HospitalsPage = () => {
           <Input type="text" placeholder="Search by hospital name..." style={{ flex: 2 }} />
           <Select style={{ flex: 1 }}>
             <option value="">All Cities</option>
-            <option value="Lahore">Lahore</option>
-            <option value="Karachi">Karachi</option>
-            <option value="Islamabad">Islamabad</option>
+            <option value="Lahore">Rahim Yar Khan</option>
+            <option value="Karachi">KhanPur</option>
+            <option value="Islamabad">Sadiqabad</option>
+            <option value="Islamabad">Liaqatpur</option>
+            <option value="Islamabad">Zahir Pir</option>
+            
+
+
           </Select>
           <Button style={{ flex: 1 }}>Search</Button>
         </FilterContainer>

@@ -1,7 +1,12 @@
+import { useState } from 'react'; 
 import styled from 'styled-components';
 import Input from '../components/Input/Input';
 import Button from '../components/Button/Button';
 import Select from '../components/Select/Select';
+import { toast } from 'react-toastify';
+import { createDonation } from '../services/api';
+
+
 
 const PageHeader = styled.div`
   background-color: #f0f0f0;
@@ -55,6 +60,45 @@ const FullWidthFormGroup = styled(FormGroup)`
 `;
 
 const DonateBloodPage = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    contact: '',
+    city: '',
+    bloodGroup: '',
+    hospital: '',
+    cost: 'Free',
+    quantity: ''
+  });
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [id]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.name || !formData.contact || !formData.city || !formData.bloodGroup || !formData.hospital || !formData.quantity) {
+      toast.error("Please fill all the required fields.");
+      return;
+    }
+
+    try {
+      const response = await createDonation(formData);
+      toast.success(response.data.message || "Donation record submitted successfully!");
+      
+      setFormData({
+        name: '', contact: '', city: '', bloodGroup: '', hospital: '', cost: 'Free', quantity: ''
+      });
+
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to submit donation record.");
+    }
+  };
+
   return (
     <>
       <PageHeader>
@@ -65,33 +109,26 @@ const DonateBloodPage = () => {
       <PageContent>
         <FormContainer>
           <FormTitle>Donor Registration Form</FormTitle>
-          <FormGrid>
+          <FormGrid onSubmit={handleSubmit}>
+            
             <FormGroup>
               <Label htmlFor="name">Full Name</Label>
-              <Input type="text" id="name" placeholder="Enter your full name" />
+              <Input type="text" id="name" placeholder="Enter your full name" value={formData.name} onChange={handleChange} />
             </FormGroup>
 
             <FormGroup>
               <Label htmlFor="contact">Contact Number</Label>
-              <Input type="tel" id="contact" placeholder="0300-1234567" />
+              <Input type="tel" id="contact" placeholder="0300-1234567" value={formData.contact} onChange={handleChange} />
             </FormGroup>
 
             <FormGroup>
               <Label htmlFor="city">City</Label>
-              <Input type="text" id="city" placeholder="e.g., Lahore" />
+              <Input type="text" id="city" placeholder="e.g., Lahore" value={formData.city} onChange={handleChange} />
             </FormGroup>
 
             <FormGroup>
-              <Label htmlFor="quantity">Quantity (ml)</Label>
-              <Select id="quantity">
-                <option value="250ml">250 ml</option>
-                <option value="450ml">450 ml</option>
-              </Select>
-            </FormGroup>
-
-            <FormGroup>
-              <Label htmlFor="blood-group">Blood Group</Label>
-              <Select id="blood-group">
+              <Label htmlFor="bloodGroup">Blood Group</Label>
+              <Select id="bloodGroup" value={formData.bloodGroup} onChange={handleChange}>
                 <option value="">Select Blood Group</option>
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
@@ -106,16 +143,29 @@ const DonateBloodPage = () => {
             
             <FormGroup>
               <Label htmlFor="hospital">Hospital / Donation Center</Label>
-              <Select id="hospital">
+              <Select id="hospital" value={formData.hospital} onChange={handleChange}>
                 <option value="">Select Hospital</option>
-                <option value="City General Hospital">City General Hospital</option>
-                <option value="Jinnah Hospital">Jinnah Hospital</option>
-                <option value="Shifa International">Shifa International</option>
+                <option value="Sheikh Zayed Hospital">Sheikh Zayed Hospital</option>
+                <option value="THQ Hospital, Khanpur">THQ Hospital, Khanpur</option>
+                <option value="DHQ Hospital, RYK">DHQ Hospital, RYK</option>
               </Select>
             </FormGroup>
 
+            <FormGroup>
+              <Label htmlFor="cost">Cost</Label>
+              <Select id="cost" value={formData.cost} onChange={handleChange}>
+                <option value="Free">Free</option>
+                <option value="Paid">Paid</option>
+              </Select>
+            </FormGroup>
+            
             <FullWidthFormGroup>
-              <Button style={{ marginTop: '20px', width: '100%', fontSize: '18px' }}>Register as Donor</Button>
+                <Label htmlFor="quantity">Quantity (Units/Bags)</Label>
+                <Input type="number" id="quantity" placeholder="e.g., 1" value={formData.quantity} onChange={handleChange} />
+            </FullWidthFormGroup>
+
+            <FullWidthFormGroup>
+              <Button type="submit" style={{ marginTop: '20px', width: '100%', fontSize: '18px' }}>Register as Donor</Button>
             </FullWidthFormGroup>
           </FormGrid>
         </FormContainer>
@@ -125,3 +175,4 @@ const DonateBloodPage = () => {
 };
 
 export default DonateBloodPage;
+
