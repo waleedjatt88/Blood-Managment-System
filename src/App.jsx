@@ -2,6 +2,8 @@ import { ThemeProvider } from 'styled-components';
 import { GlobalStyle } from './styles/GlobalStyles';
 import { theme } from './styles/theme';
 import { Routes, Route } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import MainLayout from './components/Layout/MainLayout'; 
 import HomePage from './pages/HomePage';
@@ -14,12 +16,22 @@ import AboutUsPage from './pages/AboutUsPage';
 import AuthPage from './pages/AuthPage';
 import AdminRoute from './components/Layout/AdminRoute';
 import DashboardPage from './pages/admin/DashboardPage';
-import DonationsPage from './pages/admin/DonationsPage';
 import RequestsPage from './pages/admin/RequestsPage';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <GlobalStyle />
       <Routes>
         <Route element={<MainLayout />}>
@@ -32,7 +44,6 @@ function App() {
           <Route path="/about-us" element={<AboutUsPage />} />
            <Route element={<AdminRoute />}>
             <Route path="/admin/dashboard" element={<DashboardPage />} />
-            <Route path="/admin/donations" element={<DonationsPage />} />
             <Route path="/admin/requests" element={<RequestsPage />} />
           </Route>
         </Route>
